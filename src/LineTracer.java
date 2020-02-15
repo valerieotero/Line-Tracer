@@ -70,6 +70,14 @@ public class LineTracer extends JPanel{
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);
 		
+//		JLabel lblR = new JLabel("R =");
+//		lblX.setBounds(10, 127, 28, 14);
+//		frame.getContentPane().add(lblX);
+//		
+//		JLabel lblAngle = new JLabel("Angle =");
+//		lblY.setBounds(10, 158, 17, 14);
+//		frame.getContentPane().add(lblY);
+		
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
