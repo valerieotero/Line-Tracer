@@ -1,12 +1,14 @@
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -31,6 +33,8 @@ public class LineTracer extends JPanel{
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
+	public boolean cartesian = true;
+	public boolean polar = false;
 
 	ArrayList<Integer> x = new ArrayList<Integer>();
 	ArrayList<Integer> y = new ArrayList<Integer>();
@@ -68,7 +72,7 @@ public class LineTracer extends JPanel{
 
 		//MAIN FRAME
 		frame = new JFrame();		
-		frame.setBounds(100, 100, 611, 397);
+		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -180,7 +184,7 @@ public class LineTracer extends JPanel{
 
 		//TYPE OF GRAPHIC DROPDOWN
 		JComboBox<String> comboBox_TypeofGraphic = new JComboBox<String>();
-		comboBox_TypeofGraphic.setBounds(317, 317, 123, 20);
+		comboBox_TypeofGraphic.setBounds(10, 400, 123, 20);
 		frame.getContentPane().add(comboBox_TypeofGraphic);
 		comboBox_TypeofGraphic.addItem("Cartesian");
 		comboBox_TypeofGraphic.addItem("Polar");
@@ -188,11 +192,26 @@ public class LineTracer extends JPanel{
 
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
-		lblTypeOfGraphic.setBounds(317, 297, 106, 14);
+		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 		Border blackline = BorderFactory.createLineBorder(Color.blue);	
 		
-	
+		//Cartesian Graph Image
+		if(cartesian == true) {
+			JLabel label = new JLabel("");
+			Image img = new ImageIcon(this.getClass().getResource("/CartGraph.jpg")).getImage();
+			label.setIcon(new ImageIcon(img));
+			label.setBounds(225, 20, 475, 475);
+			frame.getContentPane().add(label);
+		}
+
+		if(polar == true) {
+			JLabel label = new JLabel("");
+			Image img = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
+			label.setIcon(new ImageIcon(img));
+			label.setBounds(225, 20, 475, 475);
+			frame.getContentPane().add(label);
+		}
 	}	
 	
 	private void createEvent() {
