@@ -1,12 +1,14 @@
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -31,10 +33,10 @@ public class LineTracer extends JPanel{
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
-
-	ArrayList<Integer> x = new ArrayList<Integer>();
-	ArrayList<Integer> y = new ArrayList<Integer>();
-
+	public boolean cartesian = true;
+	public boolean polar = false;
+	private SaveCoordinates Coords = new SaveCoordinates();
+	
 
 	/*
 	 * Launch the application.
@@ -57,8 +59,7 @@ public class LineTracer extends JPanel{
 	 */
 	public LineTracer() {
 		initialize();
-		createEvent();
-
+		createLine();
 	}
 
 	/*
@@ -68,7 +69,7 @@ public class LineTracer extends JPanel{
 
 		//MAIN FRAME
 		frame = new JFrame();		
-		frame.setBounds(100, 100, 611, 397);
+		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -97,7 +98,7 @@ public class LineTracer extends JPanel{
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);
 		
-		
+		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
 
@@ -107,29 +108,26 @@ public class LineTracer extends JPanel{
 				int inputFromY = 0;
 
 				try {
-					inputFromX = Integer.parseInt(inputX.getText());   //receive input from text field
-					inputFromY = Integer.parseInt(inputY.getText());   //receive input from text field
+					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
+					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
-					if (x.size() == 2 && y.size() == 2) {
-						x.remove(0);
-						y.remove(0);
-					}
-
-					x.add(inputFromX);
-					y.add(inputFromY);										
-
+					if (Coords.size() == 4 ) {
+						Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
+						Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
+					}					
+					
+					Coords.add(inputFromX); //First add x value			
+					Coords.add(inputFromY);	// then add y value
+					
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
 				}
 
-				System.out.println(x);		
-				System.out.println(y);
+				System.out.println(Coords);	//debug purposes
 
 			}
 		});
-
-
 		btnEnter.setBounds(10, 186, 123, 23);
 		frame.getContentPane().add(btnEnter);
 
@@ -179,7 +177,7 @@ public class LineTracer extends JPanel{
 
 		//TYPE OF GRAPHIC DROPDOWN
 		JComboBox<String> comboBox_TypeofGraphic = new JComboBox<String>();
-		comboBox_TypeofGraphic.setBounds(317, 317, 123, 20);
+		comboBox_TypeofGraphic.setBounds(10, 400, 123, 20);
 		frame.getContentPane().add(comboBox_TypeofGraphic);
 		comboBox_TypeofGraphic.addItem("Cartesian");
 		comboBox_TypeofGraphic.addItem("Polar");
@@ -187,17 +185,32 @@ public class LineTracer extends JPanel{
 
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
-		lblTypeOfGraphic.setBounds(317, 297, 106, 14);
+		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 		Border blackline = BorderFactory.createLineBorder(Color.blue);	
 		
-	
+		//Cartesian Graph Image
+		if(cartesian == true) {
+			JLabel label = new JLabel("");
+			Image img = new ImageIcon(this.getClass().getResource("/CartGraph.jpg")).getImage();
+			label.setIcon(new ImageIcon(img));
+			label.setBounds(225, 20, 475, 475);
+			frame.getContentPane().add(label);
+		}
+
+		if(polar == true) {
+			JLabel label = new JLabel("");
+			Image img = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
+			label.setIcon(new ImageIcon(img));
+			label.setBounds(225, 20, 475, 475);
+			frame.getContentPane().add(label);
+		}
 	}	
 	
-	private void createEvent() {
-		
+	private void createLine() {		
 		Line line = new Line();
-		line.setBounds(211, 11, 341, 282);
+		line.setForeground(Color.RED); //Color of line. change later 
+		line.setBounds(211, 11, 341, 282); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);	 
 	}
 }
