@@ -15,6 +15,5 @@ public class Drawing extends Canvas {
 
     public void paint(Graphics g) {
         g.drawLine(150, 150, 200, 200);
-       
-    }
+    }      
 }
