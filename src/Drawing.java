@@ -10,9 +10,11 @@ public class Drawing extends Canvas {
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
+        
     }
 
     public void paint(Graphics g) {
-        g.fillOval(100, 100, 200, 200);
+        g.drawLine(150, 150, 200, 200);
+       
     }
 }

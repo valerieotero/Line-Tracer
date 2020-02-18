@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Canvas;
+import java.awt.Graphics;
 import javax.swing.border.Border;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -72,11 +74,11 @@ public class LineTracer extends JPanel{
 		
 //		JLabel lblR = new JLabel("R =");
 //		lblX.setBounds(10, 127, 28, 14);
-//		frame.getContentPane().add(lblX);
+//		frame.getContentPane().add(lblR);
 //		
 //		JLabel lblAngle = new JLabel("Angle =");
 //		lblY.setBounds(10, 158, 17, 14);
-//		frame.getContentPane().add(lblY);
+//		frame.getContentPane().add(lblAngle);
 		
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
@@ -127,10 +129,20 @@ public class LineTracer extends JPanel{
 		lblTypeOfGraphic.setBounds(317, 297, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 		Border blackline = BorderFactory.createLineBorder(Color.blue);	
+		
+//        Canvas canvas = new Drawing();
+//        canvas.setSize(500, 500);
+//        frame.add(canvas);
+//        frame.pack();
+//        frame.setVisible(true);
 	
 	}	
 	
 	private void createEvent() {
 		
 	}
+    public void paint(Graphics g) {
+        g.drawLine(150, 150, 200, 200);
+       
+    }
 }

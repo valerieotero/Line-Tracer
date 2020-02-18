@@ -15,7 +15,6 @@ public class Coordinates {
 	
 	//returns the r of the vector 
 	//formula: r = x^2 + y^2
-	
 	private static double PolarR (double X, double Y) {
 		return Math.sqrt(X*X + Y*Y);
 	}
