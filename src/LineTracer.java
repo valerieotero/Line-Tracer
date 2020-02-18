@@ -35,10 +35,8 @@ public class LineTracer extends JPanel{
 	private JTextField inputY;	
 	public boolean cartesian = true;
 	public boolean polar = false;
-
-	ArrayList<Integer> x = new ArrayList<Integer>();
-	ArrayList<Integer> y = new ArrayList<Integer>();
-
+	private SaveCoordinates Coords = new SaveCoordinates();
+	
 
 	/*
 	 * Launch the application.
@@ -61,8 +59,7 @@ public class LineTracer extends JPanel{
 	 */
 	public LineTracer() {
 		initialize();
-		createEvent();
-
+		createLine();
 	}
 
 	/*
@@ -102,7 +99,7 @@ public class LineTracer extends JPanel{
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);
 		
-		
+		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
 
@@ -112,29 +109,26 @@ public class LineTracer extends JPanel{
 				int inputFromY = 0;
 
 				try {
-					inputFromX = Integer.parseInt(inputX.getText());   //receive input from text field
-					inputFromY = Integer.parseInt(inputY.getText());   //receive input from text field
+					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
+					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
-					if (x.size() == 2 && y.size() == 2) {
-						x.remove(0);
-						y.remove(0);
-					}
-
-					x.add(inputFromX);
-					y.add(inputFromY);										
-
+					if (Coords.size() == 4 ) {
+						Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
+						Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
+					}					
+					
+					Coords.add(inputFromX); //First add x value			
+					Coords.add(inputFromY);	// then add y value
+					
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
 				}
 
-				System.out.println(x);		
-				System.out.println(y);
+				System.out.println(Coords);	//debug purposes
 
 			}
 		});
-
-
 		btnEnter.setBounds(10, 186, 123, 23);
 		frame.getContentPane().add(btnEnter);
 
@@ -214,15 +208,11 @@ public class LineTracer extends JPanel{
 		}
 	}	
 	
-	private void createEvent() {
-		
+	private void createLine() {		
 		Line line = new Line();
-		line.setBounds(211, 11, 341, 282);
+		line.setForeground(Color.RED); //Color of line. change later 
+		line.setBounds(211, 11, 341, 282); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);	 
 	}	
-
-    public void paint(Graphics g) {
-        g.drawLine(150, 150, 200, 200);
-       
-    }
+   
 }
