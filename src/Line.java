@@ -5,12 +5,10 @@ import javax.swing.JPanel;
 
 public class Line extends JPanel{
 
-    public void paint (Graphics g)
+	public void paint (Graphics g)
     {
     	super.paintComponent(g);
-    	g.drawLine(10, 10,80, 10);    
-    	g.drawLine(80, 10, 0, 80);
+    	//g.drawLine(x1, y1, x2, y2);    
+    	g.drawLine(10, 10, 0, 80);
     }
-
-
 }

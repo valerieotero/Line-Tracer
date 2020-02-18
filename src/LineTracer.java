@@ -72,7 +72,6 @@ public class LineTracer extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-
 		// X TEXT FIELD 
 		inputX = new JTextField();
 		inputX.setBounds(28, 124, 28, 20);
@@ -200,10 +199,5 @@ public class LineTracer extends JPanel{
 		Line line = new Line();
 		line.setBounds(211, 11, 341, 282);
 		frame.getContentPane().add(line);	 
-	}	
-
-    public void paint(Graphics g) {
-        g.drawLine(150, 150, 200, 200);
-       
-    }
+	}
 }
