@@ -6,6 +6,7 @@ import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -117,6 +118,10 @@ public class LineTracer extends JPanel{
 					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
+					if(inputFromX > 20 || inputFromY > 20) {
+						JOptionPane.showMessageDialog(null, "Number must be less than 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 					if (Coords.size() == 4 ) {
 						Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
 						Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
