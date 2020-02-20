@@ -37,7 +37,7 @@ public class LineTracer extends JPanel{
 	public boolean cartesian = true;
 	public boolean polar = false;
 	private SaveCoordinates Coords = new SaveCoordinates();
-	
+
 
 	/*
 	 * Launch the application.
@@ -59,8 +59,7 @@ public class LineTracer extends JPanel{
 	 * Create the application.
 	 */
 	public LineTracer() {
-		initialize();
-		createLine();
+		initialize();		
 	}
 
 	/*
@@ -73,7 +72,7 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		Line line = new Line();
 		line.setForeground(Color.RED); //Color of line. change later 
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
@@ -104,7 +103,7 @@ public class LineTracer extends JPanel{
 		JLabel lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);
-		
+
 		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
@@ -118,18 +117,19 @@ public class LineTracer extends JPanel{
 					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
-					if(inputFromX > 20 || inputFromY > 20) {
+					if(inputFromX > 20 ||(inputFromY > 20)) { //only save when its input<20
+
 						JOptionPane.showMessageDialog(null, "Number must be less than 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
 					}
-					
-					if (Coords.size() == 4 ) {
-						Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
-						Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
-					}					
-					
-					Coords.add(inputFromX); //First add x value			
-					Coords.add(inputFromY);	// then add y value
-					
+					else {
+						if (Coords.size() == 4 ) {
+							Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
+							Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
+						}	
+						Coords.add(inputFromX); //First add x value			
+						Coords.add(inputFromY);	// then add y value
+					}
+
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
@@ -199,7 +199,7 @@ public class LineTracer extends JPanel{
 		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 		Border blackline = BorderFactory.createLineBorder(Color.blue);	
-		
+
 		//Cartesian Graph Image
 		if(cartesian == true) {
 			JLabel label = new JLabel("");
@@ -216,8 +216,5 @@ public class LineTracer extends JPanel{
 			label.setBounds(225, 20, 475, 475);
 			frame.getContentPane().add(label);
 		}
-	}	
-	
-	private void createLine() {		
-	}
+	}		
 }
