@@ -72,6 +72,12 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		Line line = new Line();
+		line.setForeground(Color.RED); //Color of line. change later 
+		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
+		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
+		frame.getContentPane().add(line);	 
 
 		// X TEXT FIELD 
 		inputX = new JTextField();
@@ -208,9 +214,5 @@ public class LineTracer extends JPanel{
 	}	
 	
 	private void createLine() {		
-		Line line = new Line();
-		line.setForeground(Color.RED); //Color of line. change later 
-		line.setBounds(211, 11, 341, 282); //These bounds should be the same as the plane image bound
-		frame.getContentPane().add(line);	 
 	}
 }
