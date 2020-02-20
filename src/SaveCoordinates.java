@@ -9,8 +9,8 @@ public class SaveCoordinates extends ArrayList<Integer> {
 	  * initialized to the (0,0) of the image position within in the frame. */
 	
 	public SaveCoordinates() {
-		coords.add(10);   //x1
-		coords.add(10);   //y1
+		coords.add(237);   //x1, 237 is origin of the image
+		coords.add(237);   //y1, 237 is origin of the image
 		coords.add(10);   //x2 
 		coords.add(80);   //y2
 	}
