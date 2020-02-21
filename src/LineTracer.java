@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
@@ -28,13 +29,17 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Canvas;
 
-public class LineTracer extends JPanel{
+public class LineTracer extends JPanel implements ActionListener{
 
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
-	public boolean cartesian = true;
-	public boolean polar = false;
+	
+	public JLabel label;
+	public JLabel label2;
+	
+	
+	public JComboBox<String> comboBox_TypeofGraphic;
 
 	ArrayList<Integer> x = new ArrayList<Integer>();
 	ArrayList<Integer> y = new ArrayList<Integer>();
@@ -64,6 +69,7 @@ public class LineTracer extends JPanel{
 		createEvent();
 
 	}
+	
 
 	/*
 	 * Initialize the contents of the frame.
@@ -75,6 +81,11 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JComponent newContentPane = new ComboBoxGraphic();
+		newContentPane.setOpaque(true);
+		//newContentPane.setBounds(0, 0, 123, 25);
+		frame.setContentPane(newContentPane);
 
 
 		// X TEXT FIELD 
@@ -183,13 +194,24 @@ public class LineTracer extends JPanel{
 
 
 		//TYPE OF GRAPHIC DROPDOWN
-		JComboBox<String> comboBox_TypeofGraphic = new JComboBox<String>();
-		comboBox_TypeofGraphic.setBounds(10, 400, 123, 20);
-		frame.getContentPane().add(comboBox_TypeofGraphic);
-		comboBox_TypeofGraphic.addItem("Cartesian");
-		comboBox_TypeofGraphic.addItem("Polar");
+//		JComboBox<String> comboBox_TypeofGraphic = new JComboBox<String>();
+//		comboBox_TypeofGraphic.setBounds(10, 400, 123, 20);
+//		frame.getContentPane().add(comboBox_TypeofGraphic);
+//		comboBox_TypeofGraphic.addItem("Cart");
+//		comboBox_TypeofGraphic.addItem("Polar");
+		
+		
+		
+//		comboBox_TypeofGraphic.setSelectedIndex(0);
+//		comboBox_TypeofGraphic.addActionListener(comboBox_TypeofGraphic);
+		//add(comboBox_TypeofGraphic);
+		//add();
 
-
+//		JComponent newContentPane = new ComboBoxGraphic();
+//		newContentPane.setOpaque(true);
+//		//newContentPane.setBounds(0, 0, 123, 25);
+//		frame.setContentPane(newContentPane);
+		
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
 		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
@@ -197,21 +219,23 @@ public class LineTracer extends JPanel{
 		Border blackline = BorderFactory.createLineBorder(Color.blue);	
 		
 		//Cartesian Graph Image
-		if(cartesian == true) {
-			JLabel label = new JLabel("");
-			Image img = new ImageIcon(this.getClass().getResource("/CartGraph.jpg")).getImage();
-			label.setIcon(new ImageIcon(img));
-			label.setBounds(225, 20, 475, 475);
-			frame.getContentPane().add(label);
-		}
+		//if(cartesian == true) {
+//			label2 = new JLabel("");
+//			ImageIcon imgCart = new ImageIcon(this.getClass().getResource("/Cartesian.jpg"));
+//			label2.setIcon(imgCart);
+//			label2.setBounds(225, 20, 475, 475);
+//			frame.getContentPane().add(label2);
+			
+			
+		//}
 
-		if(polar == true) {
-			JLabel label = new JLabel("");
-			Image img = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
-			label.setIcon(new ImageIcon(img));
-			label.setBounds(225, 20, 475, 475);
-			frame.getContentPane().add(label);
-		}
+		//if(cartesian == false) {
+//			JLabel label2 = new JLabel("");
+//			Image imgPolar = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
+//			label2.setIcon(new ImageIcon(imgPolar));
+//			label2.setBounds(225, 20, 475, 475);
+//			frame.getContentPane().add(label2);
+		//}
 	}	
 	
 	private void createEvent() {
@@ -220,9 +244,41 @@ public class LineTracer extends JPanel{
 		line.setBounds(211, 11, 341, 282);
 		frame.getContentPane().add(line);	 
 	}	
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+//		if(e.getSource() == comboBox_TypeofGraphic) {
+//			JComboBox cb = (JComboBox)e.getSource();
+//			String msg = cb.getSelectedItem().toString();
+//			switch(msg) {
+//				case "Cartesian" :{
+//					//cartesian = true;
+//					JLabel label = new JLabel("");
+//					Image img = new ImageIcon(this.getClass().getResource("/CartGraph.jpg")).getImage();
+//					label.setIcon(new ImageIcon(img));
+//					label.setBounds(225, 20, 475, 475);
+//					frame.getContentPane().add(label);
+//				}
+//					break;
+//				case "Polar" :{
+//					//cartesian = false;
+//					JLabel label = new JLabel("");
+//					Image img = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
+//					label.setIcon(new ImageIcon(img));
+//					label.setBounds(225, 20, 475, 475);
+//					frame.getContentPane().add(label);
+//				}
+//					break;
+//			}
+//		}
+		
+	}
+	
 
     public void paint(Graphics g) {
         g.drawLine(150, 150, 200, 200);
        
     }
+
 }
