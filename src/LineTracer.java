@@ -38,7 +38,10 @@ public class LineTracer extends JPanel implements ActionListener{
 
 	public JLabel label;
 	public JLabel label2;
-
+	public JLabel lblX = new JLabel("x =");
+	public JLabel lblY = new JLabel("y =");
+	public JLabel lblR = new JLabel("r =");
+	public JLabel lblA = new JLabel("ang =");
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
@@ -88,36 +91,40 @@ public class LineTracer extends JPanel implements ActionListener{
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
 		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);	 
-
+		
 		//TYPE OF GRAPHIC DROPDOWN
-		JComponent newContentPane = new ComboBoxGraphic();
-		newContentPane.setOpaque(true);
-		frame.setContentPane(newContentPane);
-
+		JComponent TypeOfGraph = new ComboBoxGraphic();
+		TypeOfGraph.setOpaque(true);
+		frame.setContentPane(TypeOfGraph);
+		
+		
+		
 		// X TEXT FIELD 
 		inputX = new JTextField();
-		inputX.setBounds(28, 124, 28, 20);
+		inputX.setBounds(45, 124, 28, 20);
 		frame.getContentPane().add(inputX);
 		inputX.setColumns(10);
 
 
 		// Y TEXT FIELD
 		inputY = new JTextField();
-		inputY.setBounds(28, 155, 28, 20);
+		inputY.setBounds(45, 155, 28, 20);
 		frame.getContentPane().add(inputY);
 		inputY.setColumns(10);
 
 
 		// X TEXT FIELD LABEL
-		JLabel lblX = new JLabel("x =");
+		lblX = new JLabel("x =");
 		lblX.setBounds(10, 127, 28, 14);
 		frame.getContentPane().add(lblX);
 
 
+
 		// Y TEXT FIELD LABEL
-		JLabel lblY = new JLabel("y =");
+		lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
-		frame.getContentPane().add(lblY);
+		frame.getContentPane().add(lblY);		
+		
 
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
@@ -181,11 +188,65 @@ public class LineTracer extends JPanel implements ActionListener{
 
 
 		//TYPE OF COORDINATES DROPDOWN
-		JComboBox<String> comboBox_typeOfCoordinates = new JComboBox<String>();
-		comboBox_typeOfCoordinates.setBounds(10, 44, 123, 20);
-		frame.getContentPane().add(comboBox_typeOfCoordinates);
+		JComboBox comboBox_typeOfCoordinates = new JComboBox<String>();
 		comboBox_typeOfCoordinates.addItem("Cartesian");
 		comboBox_typeOfCoordinates.addItem("Polar");
+		comboBox_typeOfCoordinates.setBounds(10, 44, 123, 20);
+		frame.getContentPane().add(comboBox_typeOfCoordinates);
+		comboBox_typeOfCoordinates.setSelectedIndex(0);
+		comboBox_typeOfCoordinates.addActionListener(new ActionListener() {
+
+	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String options = (String) cb.getSelectedItem();	
+				try {
+					
+					if(options.equals("Cartesian")) {
+						lblR.setVisible(false);
+						lblA.setVisible(false);
+						
+						// X TEXT FIELD LABEL
+						lblX.setBounds(10, 127, 28, 14);
+						lblX.setVisible(true);
+						frame.getContentPane().add(lblX);
+						
+						// Y TEXT FIELD LABEL
+						lblY.setBounds(10, 158, 28, 14);
+						lblY.setVisible(true);
+						frame.getContentPane().add(lblY);
+						
+						//DUMMY LABEL ***IMPORTANT***
+						JLabel nuller = new JLabel("");
+						frame.getContentPane().add(nuller);
+					}
+					if(options.equals("Polar")) {
+						lblX.setVisible(false);
+						lblY.setVisible(false);
+						
+						// R TEXT FIELD LABEL
+						lblR.setBounds(9, 127, 28, 14);
+						lblR.setVisible(true);
+						frame.getContentPane().add(lblR);
+				
+						// A TEXT FIELD LABEL
+						lblA.setBounds(9, 158, 50/*17*/, 14);
+						lblA.setVisible(true);
+						frame.getContentPane().add(lblA);
+						
+						//DUMMY LABEL ***IMPORTANT***
+						JLabel nuller = new JLabel("");
+						frame.getContentPane().add(nuller);
+					}
+				}
+				catch(NumberFormatException ex) {
+					System.out.println("");
+				}
+				
+			}
+			
+		});
 
 
 		//TYPE OF COORDIANTES LABEL

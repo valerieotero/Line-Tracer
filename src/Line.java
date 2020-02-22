@@ -14,6 +14,6 @@ public class Line extends JPanel{
     {  	    	
     	super.paintComponent(g);
     	g.drawLine(list.get(0), list.get(1), list.get(2), list.get(3)); // x1, y1, x2, y2   
-    	//g.drawLine(80, 10, 0, 80);
+    	//g.drawLine(00, 10, 100, 80);
     }
 }

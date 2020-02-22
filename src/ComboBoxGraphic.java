@@ -22,12 +22,12 @@ implements ActionListener {
 		label = new JLabel();
 		picture = new JLabel();
 		updateLabel(options[cBoxList.getSelectedIndex()]);
-		picture.setBounds(0, 230, 123, 20);
+		//picture.setBounds(0, 230, 123, 20);
 		picture.setPreferredSize(new Dimension(475,475));
 
 		add(cBoxList);
 		add(picture, BorderLayout.EAST);
-		add(label, BorderLayout.PAGE_END);
+		//add(label, BorderLayout.PAGE_END);
 		setBorder(BorderFactory.createEmptyBorder(0,0,0,40));
 	}
 
