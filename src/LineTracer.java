@@ -1,8 +1,4 @@
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,42 +8,33 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Canvas;
-import java.awt.Graphics;
 import java.awt.Dimension;
 
 import javax.swing.border.Border;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.awt.event.ActionEvent;
-import java.awt.Canvas;
 
 public class LineTracer extends JPanel{
 
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
-	public Integer coord[] = {0,0,0,0};
-
-	public JLabel label;
-	public JLabel label2;
-	public JLabel lblX = new JLabel("x =");
-	public JLabel lblY = new JLabel("y =");
-	public JLabel lblR = new JLabel("r =");
-	public JLabel lblA = new JLabel("ang =");
-	public JLabel cartGraph = new JLabel();
-	public JLabel polarGraph = new JLabel();
+	private Integer coord[] = {0,0,0,0};
+	private JLabel lblX = new JLabel("x =");
+	private JLabel lblY = new JLabel("y =");
+	private JLabel lblR = new JLabel("r =");
+	private JLabel lblA = new JLabel("ang =");
+	private JLabel cartGraph = new JLabel();
+	private JLabel polarGraph = new JLabel();
+	private JComboBox<String> comboBoxGraphic;
+	private JComboBox<String> comboBoxCoordinates;
+	private Coordinates convertion;
 	int inputFromX = 0;
 	int inputFromY = 0;
-	public Line line;
+	private Line line;
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
@@ -86,13 +73,6 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-
-		//LINE
-		Line line = new Line();
-		line.setForeground(Color.RED); //Color of line. change later 
-		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
-		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
-		frame.getContentPane().add(line);	 
 		
 		//TYPE OF GRAPH DROPDOWN
 		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
@@ -121,8 +101,8 @@ public class LineTracer extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> cb = (JComboBox<String>)e.getSource();
-				String options = (String) cb.getSelectedItem();	
+				comboBoxGraphic = (JComboBox<String>)e.getSource();
+				String options = (String) comboBoxGraphic.getSelectedItem();	
 				try {
 					if(options.equals("Cartesian")) {
 						polarGraph.setVisible(false);
@@ -145,7 +125,6 @@ public class LineTracer extends JPanel{
 				
 			}
 		});
-		
 				
 		// X TEXT FIELD 
 		inputX = new JTextField();
@@ -190,7 +169,7 @@ public class LineTracer extends JPanel{
 					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
 					if(dataValidation(inputFromX, inputFromY)) { 
-						JOptionPane.showMessageDialog(null, "Number must be less than or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						planeCoordinates(inputFromX, inputFromY);
 						coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
@@ -208,6 +187,11 @@ public class LineTracer extends JPanel{
 
 		//RESET BUTTON
 		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnReset.setBounds(10, 280, 123, 23);
 		frame.getContentPane().add(btnReset);
 
@@ -239,8 +223,8 @@ public class LineTracer extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> cb = (JComboBox<String>)e.getSource();
-				String options = (String) cb.getSelectedItem();	
+				comboBoxCoordinates = (JComboBox<String>)e.getSource();
+				String options = (String) comboBoxCoordinates.getSelectedItem();	
 				try {
 					
 					if(options.equals("Cartesian")) {
@@ -271,7 +255,7 @@ public class LineTracer extends JPanel{
 						frame.getContentPane().add(lblR);
 				
 						// A TEXT FIELD LABEL
-						lblA.setBounds(9, 158, 50/17, 14);
+						lblA.setBounds(9, 158, 50, 14);
 						lblA.setVisible(true);
 						frame.getContentPane().add(lblA);
 						
@@ -324,7 +308,6 @@ public class LineTracer extends JPanel{
 			return null;
 		}
 	}
-
 	
 	public void drawing() {
 		line = new Line();	
@@ -340,7 +323,6 @@ public class LineTracer extends JPanel{
 		line.repaint();
 	}
 	
-	
 	public void planeCoordinates(Integer x, Integer y) {
 		if(x >= 0 && y >= 0) y = -1*y;
 		else if (x >= 0 && y < 0) y = -1*y;
@@ -351,7 +333,6 @@ public class LineTracer extends JPanel{
 		inputFromY = y;
 	}
 	
-	
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
 		coord[0] = x1;
 		coord[1] = y1;
@@ -359,11 +340,32 @@ public class LineTracer extends JPanel{
 		coord[3] = y2;
 	}
 	
-	
 	public boolean dataValidation(Integer x, Integer y) {
 		if(x > 20 || y > 20) { //only save when its input<20
 			return true;
 		}
 		return false;
+	}
+	
+	public void inputValidation(Integer x, Integer y) {
+		String Coordinates = (String) comboBoxCoordinates.getSelectedItem();
+		String Graphics = (String) comboBoxGraphic.getSelectedItem();
+		
+		if(Coordinates.equals("Cartesian") && Graphics.equals("Cartesian")) {
+			inputFromX = x;
+			inputFromY = y;
+		}
+		else if (Coordinates.equals("Cartesian") && Graphics.equals("Polar")) {
+			inputFromX = (int) convertion.PolarR(x, y);
+			inputFromY = (int) convertion.PolarAngle(x, y);
+		}
+		else if (Coordinates.equals("Polar") && Graphics.equals("Cartesian")) {
+			inputFromX = (int) convertion.CartesianX(x, y);
+			inputFromY = (int) convertion.CartesianY(x, y);
+		}
+		else {
+			inputFromX = x;
+			inputFromY = y;
+		}
 	}
 }
