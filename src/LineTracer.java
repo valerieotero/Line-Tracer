@@ -168,7 +168,6 @@ public class LineTracer extends JPanel{
 		comboBox_typeOfCoordinates.setSelectedIndex(0);
 		comboBox_typeOfCoordinates.addActionListener(new ActionListener() {
 
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
