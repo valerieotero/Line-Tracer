@@ -87,12 +87,6 @@ public class LineTracer extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		//LINE
-		Line line = new Line();
-		line.setForeground(Color.RED); //Color of line. change later 
-		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
-		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
-		frame.getContentPane().add(line);	 
 		
 		//TYPE OF GRAPH DROPDOWN
 		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
@@ -330,7 +324,7 @@ public class LineTracer extends JPanel{
 		line = new Line();	
 		line.setForeground(Color.RED); //Color of line. change late
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
-		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
+		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);
 
 		line.list.set(0,coord[0]*12 + 237);
