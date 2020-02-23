@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -12,14 +11,14 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 
-import javax.swing.border.Border;
-
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class LineTracer extends JPanel{
 
+	int inputFromX = 0;
+	int inputFromY = 0;
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
@@ -73,9 +72,9 @@ public class LineTracer extends JPanel{
 
 
 		//TYPE OF GRAPHIC DROPDOWN
-		//		JComponent newContentPane = new ComboBoxGraphic();
-		//		newContentPane.setOpaque(true);
-		//		frame.setContentPane(newContentPane);
+//		JComponent newContentPane = new ComboBoxGraphic();
+//		newContentPane.setOpaque(true);
+//		frame.setContentPane(newContentPane);
 
 		// X TEXT FIELD 
 		inputX = new JTextField();
@@ -112,9 +111,6 @@ public class LineTracer extends JPanel{
 
 			public void actionPerformed(ActionEvent e) {
 
-				int inputFromX = 0;
-				int inputFromY = 0;
-
 				try {
 					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
@@ -122,6 +118,7 @@ public class LineTracer extends JPanel{
 					if(dataValidation(inputFromX, inputFromY)) { 
 						JOptionPane.showMessageDialog(null, "Number must be less than or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
 					} else {
+						planeCoordinates(inputFromX, inputFromY);
 						coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
 						drawing();
 					}
@@ -261,6 +258,17 @@ public class LineTracer extends JPanel{
 		return false;
 	}
 
+	//changes the plane coordinates direction
+	public void planeCoordinates(Integer x, Integer y) {
+		if(x >= 0 && y >= 0) y = -1*y;
+		else if (x >= 0 && y < 0) y = -1*y;
+		else if (x < 0 && y >= 0) y = -1*y;
+		else y = -1*y;
+		
+		inputFromX = x;
+		inputFromY = y;
+	}
+	
 	//changes the values inside the array to draw the lines
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
 		coord[0] = x1;
@@ -268,6 +276,7 @@ public class LineTracer extends JPanel{
 		coord[2] = x2;
 		coord[3] = y2;
 	}
+	
 	//draw and create the lines
 	public void drawing() {
 		line = new Line();	

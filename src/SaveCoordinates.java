@@ -14,11 +14,9 @@ public class SaveCoordinates extends ArrayList<Integer> {
 	}
 	
 	public ArrayList<Integer> getCoordinates() {
-		System.out.println("getCoordinates" + coords);
 		return coords;
 	}
 
-	
 	public void setCoordinates(ArrayList<Integer> xCoord) {
 		 this.coords = xCoord;
 	}	
