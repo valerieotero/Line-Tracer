@@ -1,41 +1,60 @@
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Dimension;
 
+import javax.swing.border.Border;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.Canvas;
 
-public class LineTracer extends JPanel{
+public class LineTracer extends JPanel implements ActionListener{
 
-	int inputFromX = 0;
-	int inputFromY = 0;
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
+	public Integer coord[] = {0,0,0,0};
+
 	public JLabel label;
 	public JLabel label2;
-	public Line line;
-	public Integer coord[] = {0,0,0,0};	
 	public JLabel lblX = new JLabel("x =");
 	public JLabel lblY = new JLabel("y =");
 	public JLabel lblR = new JLabel("r =");
 	public JLabel lblA = new JLabel("ang =");
-
+	public JLabel cartGraph = new JLabel();
+	public JLabel polarGraph = new JLabel();
+	int inputFromX = 0;
+	int inputFromY = 0;
+	public Line line;
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
-	ArrayList<Integer> x = new ArrayList<Integer>();
-	ArrayList<Integer> y = new ArrayList<Integer>();
+
+	private SaveCoordinates Coords = new SaveCoordinates();
+
+
 	/*
 	 * Launch the application.
 	 */
@@ -51,6 +70,7 @@ public class LineTracer extends JPanel{
 			}
 		});	
 	}
+
 	/*
 	 * Create the application.
 	 */
@@ -70,12 +90,74 @@ public class LineTracer extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+		Line line = new Line();
+		line.setForeground(Color.RED); //Color of line. change later 
+		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
+		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
+		frame.getContentPane().add(line);	 
+		
+//		//TYPE OF GRAPHIC DROPDOWN
+//		JComponent TypeOfGraph = new ComboBoxGraphic();
+//		TypeOfGraph.setOpaque(true);
+//		frame.setContentPane(TypeOfGraph);
 
-		//TYPE OF GRAPHIC DROPDOWN
-//		JComponent newContentPane = new ComboBoxGraphic();
-//		newContentPane.setOpaque(true);
-//		frame.setContentPane(newContentPane);
+		
+		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
+		comboBox_typeOfGraph.addItem("Cartesian");
+		comboBox_typeOfGraph.addItem("Polar");
+		comboBox_typeOfGraph.setBounds(10, 400, 123, 20);
+		frame.getContentPane().add(comboBox_typeOfGraph);
+		comboBox_typeOfGraph.setSelectedIndex(0);
+		
+		cartGraph = new JLabel();
+		java.net.URL cartImg = ComboBoxGraphic.class.getResource("/Cartesian.jpg");
+		ImageIcon icon = new ImageIcon(cartImg);
+		cartGraph.setIcon(icon);
+		cartGraph.setPreferredSize(new Dimension(475,475));
+		add(cartGraph);
+		cartGraph.setBounds(260, 42, 475, 475);
+		
+		cartGraph.setVisible(true);
+		frame.getContentPane().add(cartGraph);
+		
+		java.net.URL polarImg = ComboBoxGraphic.class.getResource("/Polar.jpg");
+		ImageIcon polarIcon = new ImageIcon(polarImg);
+		polarGraph.setIcon(polarIcon);
+		polarGraph.setPreferredSize(new Dimension(475,475));
+		add(polarGraph);
+		setBorder(BorderFactory.createEmptyBorder(0,0,0,40));
+		
+		comboBox_typeOfGraph.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String options = (String) cb.getSelectedItem();	
+				try {
+					if(options.equals("Cartesian")) {
+						polarGraph.setVisible(false);
+
+						cartGraph.setBounds(260,42, 475, 475);
+						cartGraph.setVisible(true);
+						frame.getContentPane().add(cartGraph);
+					}
+					if(options.equals("Polar")) {
+						cartGraph.setVisible(false);
+
+						polarGraph.setBounds(260,42, 475, 475);
+						polarGraph.setVisible(true);
+						frame.getContentPane().add(polarGraph);
+					}
+				}
+				catch(NumberFormatException ex) {
+					System.out.println("");
+				}
+				
+			}
+		});
+		
+		
+		
 		// X TEXT FIELD 
 		inputX = new JTextField();
 		inputX.setBounds(45, 124, 28, 20);
@@ -93,12 +175,15 @@ public class LineTracer extends JPanel{
 		// X TEXT FIELD LABEL
 		lblX = new JLabel("x =");
 		lblX.setBounds(10, 127, 28, 14);
-		frame.getContentPane().add(lblX);		
+		frame.getContentPane().add(lblX);
+
+
 
 		// Y TEXT FIELD LABEL
-		JLabel lblY = new JLabel("y =");
+		lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
-		frame.getContentPane().add(lblY);
+		frame.getContentPane().add(lblY);		
+		
 
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
@@ -134,11 +219,6 @@ public class LineTracer extends JPanel{
 
 		//RESET BUTTON
 		JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
-		});
 		btnReset.setBounds(10, 280, 123, 23);
 		frame.getContentPane().add(btnReset);
 
@@ -160,54 +240,54 @@ public class LineTracer extends JPanel{
 
 
 		//TYPE OF COORDINATES DROPDOWN
-		JComboBox comboBox_typeOfCoordinates = new JComboBox<String>();
+		JComboBox<String> comboBox_typeOfCoordinates = new JComboBox<String>();
 		comboBox_typeOfCoordinates.addItem("Cartesian");
 		comboBox_typeOfCoordinates.addItem("Polar");
 		comboBox_typeOfCoordinates.setBounds(10, 44, 123, 20);
-		frame.getContentPane().add(comboBox_typeOfCoordinates);
+		frame.getContentPane().add(comboBox_typeOfCoordinates);		
 		comboBox_typeOfCoordinates.setSelectedIndex(0);
 		comboBox_typeOfCoordinates.addActionListener(new ActionListener() {
 
-
+	
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String options = (String) cb.getSelectedItem();	
 				try {
-
+					
 					if(options.equals("Cartesian")) {
 						lblR.setVisible(false);
 						lblA.setVisible(false);
-
+						
 						// X TEXT FIELD LABEL
 						lblX.setBounds(10, 127, 28, 14);
 						lblX.setVisible(true);
 						frame.getContentPane().add(lblX);
-
+						
 						// Y TEXT FIELD LABEL
 						lblY.setBounds(10, 158, 28, 14);
 						lblY.setVisible(true);
 						frame.getContentPane().add(lblY);
-
-						//DUMMY LABEL ***IMPORTANT***
+						
+						//DUMMY LABEL **IMPORTANT**
 						JLabel nuller = new JLabel("");
 						frame.getContentPane().add(nuller);
 					}
 					if(options.equals("Polar")) {
 						lblX.setVisible(false);
 						lblY.setVisible(false);
-
+						
 						// R TEXT FIELD LABEL
 						lblR.setBounds(9, 127, 28, 14);
 						lblR.setVisible(true);
 						frame.getContentPane().add(lblR);
-
+				
 						// A TEXT FIELD LABEL
-						lblA.setBounds(9, 158, 50/*17*/, 14);
+						lblA.setBounds(9, 158, 50/17, 14);
 						lblA.setVisible(true);
 						frame.getContentPane().add(lblA);
-
-						//DUMMY LABEL ***IMPORTANT***
+						
+						//DUMMY LABEL **IMPORTANT**
 						JLabel nuller = new JLabel("");
 						frame.getContentPane().add(nuller);
 					}
@@ -215,9 +295,9 @@ public class LineTracer extends JPanel{
 				catch(NumberFormatException ex) {
 					System.out.println("");
 				}
-
+				
 			}
-
+			
 		});
 
 
@@ -238,46 +318,43 @@ public class LineTracer extends JPanel{
 		lblEnterCoordinates.setBounds(10, 99, 136, 14);
 		frame.getContentPane().add(lblEnterCoordinates);
 
-		//DUMMY LABEL *IMPORTANT*
+
+		Border blackline = BorderFactory.createLineBorder(Color.blue);
+
+		//DUMMY LABEL **IMPORTANT**
 		JLabel nuller = new JLabel("");
 		frame.getContentPane().add(nuller);
-		frame.setVisible(true);
 
-		//DUMMY LABEL ***IMPORTANT***
-		JLabel nuller1 = new JLabel("");
-		frame.getContentPane().add(nuller1);
+	}	
+
+	private void createEvent() {
+
+		//		Line line = new Line();
+		//		line.setBounds(211, 11, 341, 282);
+		//		frame.getContentPane().add(line);	 
+	}	
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
 	}
-
-	//Helper methods
-
-	//validates that the input X and Y are less than 20 to stay inside the Cartesian plane
-	public boolean dataValidation(Integer x, Integer y) {
-		if(x > 20 || y > 20) { //only save when its input<20
-			return true;
+	
+	protected static ImageIcon createImageIcon(String path) {
+		java.net.URL imgURL = ComboBoxGraphic.class.getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			System.err.println("Couldn't find file: " + path);
+			return null;
 		}
-		return false;
 	}
 
-	//changes the plane coordinates direction
-	public void planeCoordinates(Integer x, Integer y) {
-		if(x >= 0 && y >= 0) y = -1*y;
-		else if (x >= 0 && y < 0) y = -1*y;
-		else if (x < 0 && y >= 0) y = -1*y;
-		else y = -1*y;
-		
-		inputFromX = x;
-		inputFromY = y;
-	}
+
+	public void paint(Graphics g) {
+		g.drawLine(150, 150, 200, 200);
+
+	}	
 	
-	//changes the values inside the array to draw the lines
-	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
-		coord[0] = x1;
-		coord[1] = y1;
-		coord[2] = x2;
-		coord[3] = y2;
-	}
-	
-	//draw and create the lines
 	public void drawing() {
 		line = new Line();	
 		line.setForeground(Color.RED); //Color of line. change late
@@ -290,5 +367,29 @@ public class LineTracer extends JPanel{
 		line.list.set(2,coord[2]*12 + 237);
 		line.list.set(3,coord[3]*12 + 237);
 		line.repaint();
+	}
+	
+	public void planeCoordinates(Integer x, Integer y) {
+		if(x >= 0 && y >= 0) y = -1*y;
+		else if (x >= 0 && y < 0) y = -1*y;
+		else if (x < 0 && y >= 0) y = -1*y;
+		else y = -1*y;
+		
+		inputFromX = x;
+		inputFromY = y;
+	}
+	
+	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
+		coord[0] = x1;
+		coord[1] = y1;
+		coord[2] = x2;
+		coord[3] = y2;
+	}
+	
+	public boolean dataValidation(Integer x, Integer y) {
+		if(x > 20 || y > 20) { //only save when its input<20
+			return true;
+		}
+		return false;
 	}
 }
