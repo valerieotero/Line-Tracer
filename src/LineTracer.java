@@ -1,43 +1,36 @@
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Shape;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Canvas;
-import java.awt.Graphics;
-import java.awt.Dimension;
 
 import javax.swing.border.Border;
+
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.awt.event.ActionEvent;
-import java.awt.Canvas;
 
 public class LineTracer extends JPanel{
 
 	private JFrame frame;
 	private JTextField inputX;
 	private JTextField inputY;	
-	public boolean cartesian = true;
-	public boolean polar = false;
-	private SaveCoordinates Coords = new SaveCoordinates();
-	
+	public JLabel label;
+	public JLabel label2;
+	public Line line;
+	public Integer coord[] = {0,0,0,0};	
 
+	public JComboBox<String> comboBox_TypeofGraphic;
+
+	ArrayList<Integer> x = new ArrayList<Integer>();
+	ArrayList<Integer> y = new ArrayList<Integer>();
 	/*
 	 * Launch the application.
 	 */
@@ -53,13 +46,11 @@ public class LineTracer extends JPanel{
 			}
 		});	
 	}
-
 	/*
 	 * Create the application.
 	 */
 	public LineTracer() {
-		initialize();
-		createLine();
+		initialize();		
 	}
 
 	/*
@@ -72,6 +63,12 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+
+
+		//TYPE OF GRAPHIC DROPDOWN
+		//		JComponent newContentPane = new ComboBoxGraphic();
+		//		newContentPane.setOpaque(true);
+		//		frame.setContentPane(newContentPane);
 
 		// X TEXT FIELD 
 		inputX = new JTextField();
@@ -97,7 +94,12 @@ public class LineTracer extends JPanel{
 		JLabel lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);
-		
+
+		//TYPE OF GRAPHIC LABEL
+		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
+		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
+		frame.getContentPane().add(lblTypeOfGraphic);
+
 		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
@@ -111,21 +113,16 @@ public class LineTracer extends JPanel{
 					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
 
-					if (Coords.size() == 4 ) {
-						Coords.remove(0); //Moves x2 to x1; making x1 always the new origin	
-						Coords.remove(0); //Moves y2 to y1; making y1 always the new origin.	
-					}					
-					
-					Coords.add(inputFromX); //First add x value			
-					Coords.add(inputFromY);	// then add y value
-					
+					if(dataValidation(inputFromX, inputFromY)) { 
+						JOptionPane.showMessageDialog(null, "Number must be less than or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+						drawing();
+					}
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
 				}
-
-				System.out.println(Coords);	//debug purposes
-
 			}
 		});
 		btnEnter.setBounds(10, 186, 123, 23);
@@ -134,6 +131,11 @@ public class LineTracer extends JPanel{
 
 		//RESET BUTTON
 		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
 		btnReset.setBounds(10, 280, 123, 23);
 		frame.getContentPane().add(btnReset);
 
@@ -142,6 +144,11 @@ public class LineTracer extends JPanel{
 		JButton btnBackToOrigin = new JButton("Back to origin");
 		btnBackToOrigin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inputX.setText("0");
+				inputY.setText("0");
+
+				coord[2] = 0;
+				coord[3] = 0;
 			}
 		});
 		btnBackToOrigin.setIcon(null);
@@ -174,43 +181,43 @@ public class LineTracer extends JPanel{
 		lblEnterCoordinates.setBounds(10, 99, 136, 14);
 		frame.getContentPane().add(lblEnterCoordinates);
 
+		Border blackline = BorderFactory.createLineBorder(Color.blue);
 
-		//TYPE OF GRAPHIC DROPDOWN
-		JComboBox<String> comboBox_TypeofGraphic = new JComboBox<String>();
-		comboBox_TypeofGraphic.setBounds(10, 400, 123, 20);
-		frame.getContentPane().add(comboBox_TypeofGraphic);
-		comboBox_TypeofGraphic.addItem("Cartesian");
-		comboBox_TypeofGraphic.addItem("Polar");
+		//DUMMY LABEL *IMPORTANT*
+		JLabel nuller = new JLabel("");
+		frame.getContentPane().add(nuller);
+		frame.setVisible(true);
+	}
 
-
-		//TYPE OF GRAPHIC LABEL
-		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
-		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
-		frame.getContentPane().add(lblTypeOfGraphic);
-		Border blackline = BorderFactory.createLineBorder(Color.blue);	
-		
-		//Cartesian Graph Image
-		if(cartesian == true) {
-			JLabel label = new JLabel("");
-			Image img = new ImageIcon(this.getClass().getResource("/CartGraph.jpg")).getImage();
-			label.setIcon(new ImageIcon(img));
-			label.setBounds(225, 20, 475, 475);
-			frame.getContentPane().add(label);
-		}
-
-		if(polar == true) {
-			JLabel label = new JLabel("");
-			Image img = new ImageIcon(this.getClass().getResource("/PolarGraph.jpg")).getImage();
-			label.setIcon(new ImageIcon(img));
-			label.setBounds(225, 20, 475, 475);
-			frame.getContentPane().add(label);
-		}
-	}	
+	//Helper methods
 	
-	private void createLine() {		
-		Line line = new Line();
-		line.setForeground(Color.RED); //Color of line. change later 
-		line.setBounds(211, 11, 341, 282); //These bounds should be the same as the plane image bound
-		frame.getContentPane().add(line);	 
+	//validates that the input X and Y are less than 20 to stay inside the Cartesian plane
+	public boolean dataValidation(Integer x, Integer y) {
+		if(x > 20 || y > 20) { //only save when its input<20
+			return true;
+		}
+		return false;
+	}
+	
+	//changes the values inside the array to draw the lines
+	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
+		coord[0] = x1;
+		coord[1] = y1;
+		coord[2] = x2;
+		coord[3] = y2;
+	}
+	//draw and create the lines
+	public void drawing() {
+		line = new Line();	
+		line.setForeground(Color.RED); //Color of line. change late
+		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
+		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
+		frame.getContentPane().add(line);
+		
+		line.list.set(0,coord[0]*12 + 237);
+		line.list.set(1,coord[1]*12 + 237);
+		line.list.set(2,coord[2]*12 + 237);
+		line.list.set(3,coord[3]*12 + 237);
+		line.repaint();
 	}
 }
