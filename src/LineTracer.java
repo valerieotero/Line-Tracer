@@ -30,7 +30,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Canvas;
 
-public class LineTracer extends JPanel implements ActionListener{
+public class LineTracer extends JPanel{
 
 	private JFrame frame;
 	private JTextField inputX;
@@ -312,11 +312,6 @@ public class LineTracer extends JPanel implements ActionListener{
 		JLabel nuller = new JLabel("");
 		frame.getContentPane().add(nuller);
 
-	}	
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
 	}
 	
 	
