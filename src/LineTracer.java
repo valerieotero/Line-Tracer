@@ -52,9 +52,6 @@ public class LineTracer extends JPanel implements ActionListener{
 	public JComboBox<String> comboBox_TypeofGraphic;
 
 
-	private SaveCoordinates Coords = new SaveCoordinates();
-
-
 	/*
 	 * Launch the application.
 	 */
@@ -90,36 +87,29 @@ public class LineTracer extends JPanel implements ActionListener{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+		//LINE
 		Line line = new Line();
 		line.setForeground(Color.RED); //Color of line. change later 
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
-		line.setBounds(225, 20, 475, 475); //These bounds should be the same as the plane image bound
+		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);	 
 		
-//		//TYPE OF GRAPHIC DROPDOWN
-//		JComponent TypeOfGraph = new ComboBoxGraphic();
-//		TypeOfGraph.setOpaque(true);
-//		frame.setContentPane(TypeOfGraph);
-
-		
+		//TYPE OF GRAPH DROPDOWN
 		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
 		comboBox_typeOfGraph.addItem("Cartesian");
 		comboBox_typeOfGraph.addItem("Polar");
 		comboBox_typeOfGraph.setBounds(10, 400, 123, 20);
 		frame.getContentPane().add(comboBox_typeOfGraph);
-		comboBox_typeOfGraph.setSelectedIndex(0);
-		
+		comboBox_typeOfGraph.setSelectedIndex(0);		
 		cartGraph = new JLabel();
 		java.net.URL cartImg = ComboBoxGraphic.class.getResource("/Cartesian.jpg");
 		ImageIcon icon = new ImageIcon(cartImg);
 		cartGraph.setIcon(icon);
 		cartGraph.setPreferredSize(new Dimension(475,475));
 		add(cartGraph);
-		cartGraph.setBounds(260, 42, 475, 475);
-		
+		cartGraph.setBounds(260, 42, 475, 475);		
 		cartGraph.setVisible(true);
-		frame.getContentPane().add(cartGraph);
-		
+		frame.getContentPane().add(cartGraph);		
 		java.net.URL polarImg = ComboBoxGraphic.class.getResource("/Polar.jpg");
 		ImageIcon polarIcon = new ImageIcon(polarImg);
 		polarGraph.setIcon(polarIcon);
@@ -156,8 +146,7 @@ public class LineTracer extends JPanel implements ActionListener{
 			}
 		});
 		
-		
-		
+				
 		// X TEXT FIELD 
 		inputX = new JTextField();
 		inputX.setBounds(45, 124, 28, 20);
@@ -178,7 +167,6 @@ public class LineTracer extends JPanel implements ActionListener{
 		frame.getContentPane().add(lblX);
 
 
-
 		// Y TEXT FIELD LABEL
 		lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
@@ -190,6 +178,7 @@ public class LineTracer extends JPanel implements ActionListener{
 		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 
+		
 		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
@@ -318,7 +307,6 @@ public class LineTracer extends JPanel implements ActionListener{
 		lblEnterCoordinates.setBounds(10, 99, 136, 14);
 		frame.getContentPane().add(lblEnterCoordinates);
 
-
 		Border blackline = BorderFactory.createLineBorder(Color.blue);
 
 		//DUMMY LABEL **IMPORTANT**
@@ -327,17 +315,11 @@ public class LineTracer extends JPanel implements ActionListener{
 
 	}	
 
-	private void createEvent() {
-
-		//		Line line = new Line();
-		//		line.setBounds(211, 11, 341, 282);
-		//		frame.getContentPane().add(line);	 
-	}	
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	}
+	
 	
 	protected static ImageIcon createImageIcon(String path) {
 		java.net.URL imgURL = ComboBoxGraphic.class.getResource(path);
@@ -349,11 +331,6 @@ public class LineTracer extends JPanel implements ActionListener{
 		}
 	}
 
-
-	public void paint(Graphics g) {
-		g.drawLine(150, 150, 200, 200);
-
-	}	
 	
 	public void drawing() {
 		line = new Line();	
@@ -369,6 +346,7 @@ public class LineTracer extends JPanel implements ActionListener{
 		line.repaint();
 	}
 	
+	
 	public void planeCoordinates(Integer x, Integer y) {
 		if(x >= 0 && y >= 0) y = -1*y;
 		else if (x >= 0 && y < 0) y = -1*y;
@@ -379,12 +357,14 @@ public class LineTracer extends JPanel implements ActionListener{
 		inputFromY = y;
 	}
 	
+	
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
 		coord[0] = x1;
 		coord[1] = y1;
 		coord[2] = x2;
 		coord[3] = y2;
 	}
+	
 	
 	public boolean dataValidation(Integer x, Integer y) {
 		if(x > 20 || y > 20) { //only save when its input<20
