@@ -29,8 +29,8 @@ public class LineTracer extends JPanel{
 	private JLabel lblA = new JLabel("ang =");
 	private JLabel cartGraph = new JLabel();
 	private JLabel polarGraph = new JLabel();
-	private JComboBox<String> comboBoxGraphic = new JComboBox();
-	private JComboBox<String> comboBoxCoordinates = new JComboBox();
+	private JComboBox<String> comboBoxGraphic = new JComboBox<String>();
+	private JComboBox<String> comboBoxCoordinates = new JComboBox<String>();
 	private String Coordinates = "Cartesian";
 	private String Graphics = "Cartesian";
 	private Coordinates convertion;
@@ -236,10 +236,10 @@ public class LineTracer extends JPanel{
 		//RESET BUTTON
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
-				btnBackToOrigin.doClick();
-				int lineCount = line.getComponentCount();
-				System.out.println("");
+				
+				btnBackToOrigin.doClick();				
 			}
 		});
 		btnReset.setBounds(10, 280, 123, 23);
@@ -336,7 +336,7 @@ public class LineTracer extends JPanel{
 		//ADDED BY JOHN FOR TEST PURPOSES (NEEDED OR CIRCLE WON'T WORK)
 		//Creates circle at origin
 		circle = new Circle();
-		circle.setForeground(Color.BLUE);
+		circle.setForeground(Color.BLACK);
 		circle.setOpaque(false); // Can make a boolean to set visibility of this circle
 		circle.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(circle);
@@ -361,7 +361,7 @@ public class LineTracer extends JPanel{
 	public void drawing() {
 		Graphics = (String) comboBoxGraphic.getSelectedItem();
 		line = new Line();	
-		line.setForeground(Color.RED); //Color of line. change late
+		line.setForeground(Color.BLACK); //Color of line. change late
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
 		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);
@@ -369,19 +369,19 @@ public class LineTracer extends JPanel{
 			Graphics = "Cartesian";
 		}
 		if(Graphics.equals("Cartesian")) {
-			line.list.set(0,coord[0]*12 + 237);
-			line.list.set(1,coord[1]*12 + 237);
-			line.list.set(2,coord[2]*12 + 237);
-			line.list.set(3,coord[3]*12 + 237);
+			line.coordinateList.set(0,coord[0]*12 + 237);
+			line.coordinateList.set(1,coord[1]*12 + 237);
+			line.coordinateList.set(2,coord[2]*12 + 237);
+			line.coordinateList.set(3,coord[3]*12 + 237);
 			line.repaint();
 			frame.getContentPane().add(cartGraph);
 			frame.getContentPane().add(polarGraph);
 		}
 		else {
-			line.list.set(0,coord[0]*6 + 237);
-			line.list.set(1,coord[1]*6 + 237);
-			line.list.set(2,coord[2]*6 + 237);
-			line.list.set(3,coord[3]*6 + 237);
+			line.coordinateList.set(0,coord[0]*6 + 237);
+			line.coordinateList.set(1,coord[1]*6 + 237);
+			line.coordinateList.set(2,coord[2]*6 + 237);
+			line.coordinateList.set(3,coord[3]*6 + 237);
 			line.repaint();
 			frame.getContentPane().add(cartGraph);
 			frame.getContentPane().add(polarGraph);
@@ -423,7 +423,6 @@ public class LineTracer extends JPanel{
 	}
 
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
-
 		coord[0] = x1;
 		coord[1] = y1;
 		coord[2] = x2;

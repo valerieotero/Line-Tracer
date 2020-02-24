@@ -4,8 +4,8 @@ import javax.swing.JPanel;
 
 public class Circle extends JPanel {
 	
-	private SaveCoordinates coords = new SaveCoordinates();
-	List<Integer> listCircle = coords.getCoordinates();
+	private SaveCoordinates coordinates = new SaveCoordinates();
+	List<Integer> listCircle = coordinates.getCoordinates();
 
 	public void paintComponent(Graphics g)
 	{  	

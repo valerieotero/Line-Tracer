@@ -5,14 +5,14 @@ import javax.swing.JPanel;
 
 public class Line extends JPanel{
 
-	private SaveCoordinates coords = new SaveCoordinates();
-	List<Integer> list = coords.getCoordinates();
+	private SaveCoordinates coordinates = new SaveCoordinates();
+	List<Integer> coordinateList = coordinates.getCoordinates();
 
-	//paint the components
+	//Paints the components
 	@Override 
 	public void paintComponent(Graphics g)
 	{  	    	
 		super.paintComponent(g);
-		g.drawLine(list.get(0), list.get(1), list.get(2), list.get(3)); // x1, y1, x2, y2 
+		g.drawLine(coordinateList.get(0), coordinateList.get(1), coordinateList.get(2), coordinateList.get(3)); // x1, y1, x2, y2 
 	}
 }
