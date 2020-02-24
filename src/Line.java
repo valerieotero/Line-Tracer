@@ -13,6 +13,6 @@ public class Line extends JPanel{
 	public void paintComponent(Graphics g)
 	{  	    	
 		super.paintComponent(g);
-		g.drawLine(list.get(0), list.get(1), list.get(2), list.get(3)); // x1, y1, x2, y2   
+		g.drawLine(list.get(0), list.get(1), list.get(2), list.get(3)); // x1, y1, x2, y2 
 	}
 }

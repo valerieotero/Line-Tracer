@@ -39,6 +39,7 @@ public class LineTracer extends JPanel{
 	int inputFromR = 0;
 	int inputFromAng = 0;
 	private Line line;
+	private Circle circle;
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
@@ -59,6 +60,7 @@ public class LineTracer extends JPanel{
 		});	
 	}
 
+
 	/*
 	 * Create the application.
 	 */
@@ -77,6 +79,7 @@ public class LineTracer extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+
 		//TYPE OF GRAPH DROPDOWN
 		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
 		comboBox_typeOfGraph.addItem("Cartesian");
@@ -88,8 +91,7 @@ public class LineTracer extends JPanel{
 		java.net.URL cartImg = ComboBoxGraphic.class.getResource("/Cartesian.jpg");
 		ImageIcon icon = new ImageIcon(cartImg);
 		cartGraph.setIcon(icon);
-		cartGraph.setPreferredSize(new Dimension(475,475));
-		add(cartGraph);
+		cartGraph.setPreferredSize(new Dimension(475,475));		
 		cartGraph.setBounds(260, 42, 475, 475);		
 		cartGraph.setVisible(true);
 		frame.getContentPane().add(cartGraph);		
@@ -128,6 +130,7 @@ public class LineTracer extends JPanel{
 
 			}
 		});
+
 
 		// X TEXT FIELD 
 		inputX = new JTextField();
@@ -183,6 +186,7 @@ public class LineTracer extends JPanel{
 							planeCoordinates(inputFromX, inputFromY);
 							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
 							drawing();
+							drawingCircle();
 						}
 					}
 					else {
@@ -195,8 +199,11 @@ public class LineTracer extends JPanel{
 							inputValidation(inputFromR, inputFromAng);
 							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
 							drawing();
+							drawingCircle();
 						}
 					}
+
+
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
@@ -206,22 +213,15 @@ public class LineTracer extends JPanel{
 		btnEnter.setBounds(10, 186, 123, 23);
 		frame.getContentPane().add(btnEnter);
 
-
-		//RESET BUTTON
-		JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
-		});
-		btnReset.setBounds(10, 280, 123, 23);
-		frame.getContentPane().add(btnReset);
-
-
 		//BACK TO ORIGIN BUTTON
 		JButton btnBackToOrigin = new JButton("Back to origin");
 		btnBackToOrigin.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent arg0) {
+				circle.listCircle.set(2,237);
+				circle.listCircle.set(3,237);
+				circle.repaint();
+
 				inputX.setText("0");
 				inputY.setText("0");
 
@@ -233,6 +233,17 @@ public class LineTracer extends JPanel{
 		btnBackToOrigin.setBounds(10, 314, 123, 23);
 		frame.getContentPane().add(btnBackToOrigin);
 
+		//RESET BUTTON
+		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnBackToOrigin.doClick();
+				int lineCount = line.getComponentCount();
+				System.out.println("");
+			}
+		});
+		btnReset.setBounds(10, 280, 123, 23);
+		frame.getContentPane().add(btnReset);
 
 		//TYPE OF COORDINATES DROPDOWN
 		JComboBox<String> comboBox_typeOfCoordinates = new JComboBox<String>();
@@ -242,11 +253,13 @@ public class LineTracer extends JPanel{
 		frame.getContentPane().add(comboBox_typeOfCoordinates);	
 		comboBox_typeOfCoordinates.setSelectedIndex(0);
 		comboBox_typeOfCoordinates.addActionListener(new ActionListener() {
-		
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				comboBoxCoordinates = (JComboBox<String>)e.getSource();
 				Coordinates = (String) comboBoxCoordinates.getSelectedItem();	
+
 				try {
 
 					if(Coordinates.equals("Cartesian")) {
@@ -267,7 +280,9 @@ public class LineTracer extends JPanel{
 						JLabel nuller = new JLabel("");
 						frame.getContentPane().add(nuller);
 					}
+
 					if(Coordinates.equals("Polar")) {
+
 						lblX.setVisible(false);
 						lblY.setVisible(false);
 
@@ -318,10 +333,22 @@ public class LineTracer extends JPanel{
 		JLabel nuller = new JLabel("");
 		frame.getContentPane().add(nuller);
 
+		//ADDED BY JOHN FOR TEST PURPOSES (NEEDED OR CIRCLE WON'T WORK)
+		//Creates circle at origin
+		circle = new Circle();
+		circle.setForeground(Color.BLUE);
+		circle.setOpaque(false); // Can make a boolean to set visibility of this circle
+		circle.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
+		frame.getContentPane().add(circle);
+		circle.listCircle.set(2, 237);
+		circle.listCircle.set(3, 237);
+		circle.repaint();
+		frame.getContentPane().add(cartGraph); // Make sure these two are ok
+		frame.getContentPane().add(polarGraph); // ... Might cause problems in future
 	}
 
-
 	protected static ImageIcon createImageIcon(String path) {
+
 		java.net.URL imgURL = ComboBoxGraphic.class.getResource(path);
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
@@ -359,9 +386,31 @@ public class LineTracer extends JPanel{
 			frame.getContentPane().add(cartGraph);
 			frame.getContentPane().add(polarGraph);
 		}
-
 	}
-	
+
+	// DRAW CIRCLE
+	public void drawingCircle() {
+		Graphics = (String) comboBoxGraphic.getSelectedItem();
+		if(Graphics == null) {
+			Graphics = "Cartesian";
+		}
+		if(Graphics.equals("Cartesian")) {
+			circle.listCircle.set(0,coord[0]*12 + 237);
+			circle.listCircle.set(1,coord[1]*12 + 237);
+			circle.listCircle.set(2,coord[2]*12 + 237);
+			circle.listCircle.set(3,coord[3]*12 + 237);
+			circle.repaint();
+		}
+		else {
+			circle.listCircle.set(0,coord[0]*6 + 237);
+			circle.listCircle.set(1,coord[1]*6 + 237);
+			circle.listCircle.set(2,coord[2]*6 + 237);
+			circle.listCircle.set(3,coord[3]*6 + 237);
+			circle.repaint();
+		}
+	}
+
+
 
 	public void planeCoordinates(Integer x, Integer y) {
 		if(x >= 0 && y >= 0) y = -1*y;
@@ -374,6 +423,7 @@ public class LineTracer extends JPanel{
 	}
 
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
+
 		coord[0] = x1;
 		coord[1] = y1;
 		coord[2] = x2;
@@ -386,17 +436,22 @@ public class LineTracer extends JPanel{
 		}
 		return false;
 	}
+
+
 	public boolean dataValidationPolar(Integer x, Integer y) {
+
 		if(x > 30 || y > 360) { //only save when its input<20
 			return true;
 		}
 		return false;
 	}
 
+
 	public void inputValidation(Integer x, Integer y) {
+
 		Coordinates = (String) comboBoxCoordinates.getSelectedItem();
 		Graphics = (String) comboBoxGraphic.getSelectedItem();
-		
+
 		//When the GUI starts Coordinates and Graphics are equal to Cartesian
 		//Because buttons are not pressed values are then changes to null
 		//To prevent that, we equal them here to Cartesian.
@@ -404,14 +459,15 @@ public class LineTracer extends JPanel{
 			Coordinates = "Cartesian";
 			Graphics = "Cartesian";
 		}
+
 		if(Coordinates == null) {
 			Coordinates = "Cartesian";
 		}
+
 		if(Graphics == null) {
 			Graphics = "Cartesian";
 		}
-		
-		
+
 		if(Coordinates.equals("Cartesian") && Graphics.equals("Cartesian")) {
 			dataValidationCartesian(inputFromX, inputFromY);
 			inputFromX = x;
@@ -434,3 +490,4 @@ public class LineTracer extends JPanel{
 		}
 	}
 }
+
