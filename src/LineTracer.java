@@ -170,68 +170,49 @@ public class LineTracer extends JPanel{
 		btnEnter.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
 				Coordinates = (String) comboBoxCoordinates.getSelectedItem();
 				if(Coordinates == null) {
 					Coordinates = "Cartesian";
 					//Graphics = "Cartesian";
 				}
-				
 				try {
-					
 					if(Coordinates.equals("Cartesian")) {
-						
 						inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 						inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
-						
-						dataValidationPolar(inputFromX, inputFromY);
-						
-						inputValidation(inputFromX, inputFromY);
-						
-						System.out.println("Im here-Cartesian");
+						if(dataValidationCartesian(inputFromX, inputFromY)) {
+							JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							System.out.println("false");
+							inputValidation(inputFromX, inputFromY);
+							planeCoordinates(inputFromX, inputFromY);
+							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+							drawing();
+							drawingCircle();
+						}
 					}
 					else {
-						
 						inputFromR =  Integer.parseInt(inputX.getText());
 						inputFromAng =  Integer.parseInt(inputY.getText());
-						dataValidationPolar(inputFromR, inputFromAng);
-						inputValidation(inputFromR, inputFromAng);
-						System.out.println("Im here-Polar");
+						if(dataValidationPolar(inputFromR, inputFromAng)) {
+							JOptionPane.showMessageDialog(null, "Numbers must be inside a radius of 30 and a angle of 360", "Warning", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							inputValidation(inputFromR, inputFromAng);
+							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+							drawing();
+							drawingCircle();
+						}
 					}
 
-					planeCoordinates(inputFromX, inputFromY);
-					coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
-					drawing();
-					drawingCircle();
+					
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
 				}
 			}
-		});
-		btnEnter.setBounds(10, 186, 123, 23);
+		});		btnEnter.setBounds(10, 186, 123, 23);
 		frame.getContentPane().add(btnEnter);
-
-
-		//RESET BUTTON
-		JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				circle.listCircle.set(2,237);
-				circle.listCircle.set(3,237);
-				circle.repaint();
-				
-				inputX.setText("0");
-				inputY.setText("0");
-
-				coord[2] = 0;
-				coord[3] = 0;
-
-			}
-		});
-		btnReset.setBounds(10, 280, 123, 23);
-		frame.getContentPane().add(btnReset);
-
 
 		//BACK TO ORIGIN BUTTON
 		JButton btnBackToOrigin = new JButton("Back to origin");
@@ -252,6 +233,20 @@ public class LineTracer extends JPanel{
 		btnBackToOrigin.setIcon(null);
 		btnBackToOrigin.setBounds(10, 314, 123, 23);
 		frame.getContentPane().add(btnBackToOrigin);
+
+		//RESET BUTTON
+		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnBackToOrigin.doClick();
+				int lineCount = line.getComponentCount();
+				System.out.println("");
+			}
+		});
+		btnReset.setBounds(10, 280, 123, 23);
+		frame.getContentPane().add(btnReset);
+
+
 
 
 		//TYPE OF COORDINATES DROPDOWN
@@ -383,7 +378,8 @@ public class LineTracer extends JPanel{
 		line.list.set(3,coord[3]*12 + 237);
 		line.repaint();
 		frame.getContentPane().add(cartGraph);
-		frame.getContentPane().add(polarGraph);
+		frame.getContentPane().add(polarGraph);	
+		System.out.println();
 	}
 	
 	// DRAW CIRCLE
@@ -417,8 +413,9 @@ public class LineTracer extends JPanel{
 
 	public boolean dataValidationCartesian(Integer x, Integer y) {
 		
-		if(x > 20 || y > 20) { //only save when its input<20
+		if(x > 20 || y > 20 || x < -20 || y < -20) { //only save when its input<20
 			JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		}
 		return false;
 	}
@@ -428,6 +425,7 @@ public class LineTracer extends JPanel{
 		
 		if(x > 30 || y > 360) { //only save when its input<20
 			JOptionPane.showMessageDialog(null, "Numbers must be inside a radius of 30 and a angle of 360", "Warning", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		}
 		return false;
 	}
@@ -473,4 +471,6 @@ public class LineTracer extends JPanel{
 			inputFromY = y;
 		}
 	}
+
 }
+
