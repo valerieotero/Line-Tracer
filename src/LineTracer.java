@@ -29,8 +29,10 @@ public class LineTracer extends JPanel{
 	private JLabel lblA = new JLabel("ang =");
 	private JLabel cartGraph = new JLabel();
 	private JLabel polarGraph = new JLabel();
-	private JComboBox<String> comboBoxGraphic;
-	private JComboBox<String> comboBoxCoordinates;
+	private JComboBox<String> comboBoxGraphic = new JComboBox();
+	private JComboBox<String> comboBoxCoordinates = new JComboBox();
+	public String Coordinates = "Cartesian";
+	public String Graphics = "Cartesian";
 	private Coordinates convertion;
 	int inputFromX = 0;
 	int inputFromY = 0;
@@ -75,7 +77,7 @@ public class LineTracer extends JPanel{
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		//TYPE OF GRAPH DROPDOWN
 		JComboBox<String> comboBox_typeOfGraph = new JComboBox<String>();
 		comboBox_typeOfGraph.addItem("Cartesian");
@@ -98,22 +100,22 @@ public class LineTracer extends JPanel{
 		polarGraph.setPreferredSize(new Dimension(475,475));
 		add(polarGraph);
 		setBorder(BorderFactory.createEmptyBorder(0,0,0,40));
-		
+
 		comboBox_typeOfGraph.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				comboBoxGraphic = (JComboBox<String>)e.getSource();
-				String options = (String) comboBoxGraphic.getSelectedItem();	
+				Graphics = (String) comboBoxGraphic.getSelectedItem();	
 				try {
-					if(options.equals("Cartesian")) {
+					if(Graphics.equals("Cartesian")) {
 						polarGraph.setVisible(false);
 
 						cartGraph.setBounds(260,42, 475, 475);
 						cartGraph.setVisible(true);
 						frame.getContentPane().add(cartGraph);
 					}
-					if(options.equals("Polar")) {
+					if(Graphics.equals("Polar")) {
 						cartGraph.setVisible(false);
 
 						polarGraph.setBounds(260,42, 475, 475);
@@ -124,10 +126,10 @@ public class LineTracer extends JPanel{
 				catch(NumberFormatException ex) {
 					System.out.println("");
 				}
-				
+
 			}
 		});
-				
+
 		// X TEXT FIELD 
 		inputX = new JTextField();
 		inputX.setBounds(45, 124, 28, 20);
@@ -152,31 +154,43 @@ public class LineTracer extends JPanel{
 		lblY = new JLabel("y =");
 		lblY.setBounds(10, 158, 17, 14);
 		frame.getContentPane().add(lblY);		
-		
+
 
 		//TYPE OF GRAPHIC LABEL
 		JLabel lblTypeOfGraphic = new JLabel("Type of Graphic:");
 		lblTypeOfGraphic.setBounds(10, 375, 106, 14);
 		frame.getContentPane().add(lblTypeOfGraphic);
 
-		
+
 		//ENTER BUTTON
 		JButton btnEnter = new JButton("Enter");
 		btnEnter.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+				Coordinates = (String) comboBoxCoordinates.getSelectedItem();
+				if(Coordinates == null) {
+					Coordinates = "Cartesian";
+					//Graphics = "Cartesian";
+				}
 				try {
-					inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
-					inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
-
-					if(dataValidation(inputFromX, inputFromY)) { 
-						JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						planeCoordinates(inputFromX, inputFromY);
-						coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
-						drawing();
+					if(Coordinates.equals("Cartesian")) {
+						inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
+						inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
+						dataValidationPolar(inputFromX, inputFromY);
+						inputValidation(inputFromX, inputFromY);
+						System.out.println("Im here-Cartesian");
 					}
+					else {
+						inputFromR =  Integer.parseInt(inputX.getText());
+						inputFromAng =  Integer.parseInt(inputY.getText());
+						dataValidationPolar(inputFromR, inputFromAng);
+						inputValidation(inputFromR, inputFromAng);
+						System.out.println("Im here-Polar");
+					}
+
+					planeCoordinates(inputFromX, inputFromY);
+					coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+					drawing();
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
@@ -191,7 +205,7 @@ public class LineTracer extends JPanel{
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 			}
 		});
 		btnReset.setBounds(10, 280, 123, 23);
@@ -219,48 +233,48 @@ public class LineTracer extends JPanel{
 		comboBox_typeOfCoordinates.addItem("Cartesian");
 		comboBox_typeOfCoordinates.addItem("Polar");
 		comboBox_typeOfCoordinates.setBounds(10, 44, 123, 20);
-		frame.getContentPane().add(comboBox_typeOfCoordinates);		
+		frame.getContentPane().add(comboBox_typeOfCoordinates);	
 		comboBox_typeOfCoordinates.setSelectedIndex(0);
 		comboBox_typeOfCoordinates.addActionListener(new ActionListener() {
-
+		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				comboBoxCoordinates = (JComboBox<String>)e.getSource();
-				String options = (String) comboBoxCoordinates.getSelectedItem();	
+				Coordinates = (String) comboBoxCoordinates.getSelectedItem();	
 				try {
-					
-					if(options.equals("Cartesian")) {
+
+					if(Coordinates.equals("Cartesian")) {
 						lblR.setVisible(false);
 						lblA.setVisible(false);
-						
+
 						// X TEXT FIELD LABEL
 						lblX.setBounds(10, 127, 28, 14);
 						lblX.setVisible(true);
 						frame.getContentPane().add(lblX);
-						
+
 						// Y TEXT FIELD LABEL
 						lblY.setBounds(10, 158, 28, 14);
 						lblY.setVisible(true);
 						frame.getContentPane().add(lblY);
-						
+
 						//DUMMY LABEL **IMPORTANT**
 						JLabel nuller = new JLabel("");
 						frame.getContentPane().add(nuller);
 					}
-					if(options.equals("Polar")) {
+					if(Coordinates.equals("Polar")) {
 						lblX.setVisible(false);
 						lblY.setVisible(false);
-						
+
 						// R TEXT FIELD LABEL
 						lblR.setBounds(9, 127, 28, 14);
 						lblR.setVisible(true);
 						frame.getContentPane().add(lblR);
-				
+
 						// A TEXT FIELD LABEL
 						lblA.setBounds(9, 158, 50, 14);
 						lblA.setVisible(true);
 						frame.getContentPane().add(lblA);
-						
+
 						//DUMMY LABEL **IMPORTANT**
 						JLabel nuller = new JLabel("");
 						frame.getContentPane().add(nuller);
@@ -269,9 +283,9 @@ public class LineTracer extends JPanel{
 				catch(NumberFormatException ex) {
 					System.out.println("");
 				}
-				
+
 			}
-			
+
 		});
 
 
@@ -299,8 +313,8 @@ public class LineTracer extends JPanel{
 		frame.getContentPane().add(nuller);
 
 	}
-	
-	
+
+
 	protected static ImageIcon createImageIcon(String path) {
 		java.net.URL imgURL = ComboBoxGraphic.class.getResource(path);
 		if (imgURL != null) {
@@ -310,7 +324,7 @@ public class LineTracer extends JPanel{
 			return null;
 		}
 	}
-	
+
 	public void drawing() {
 		line = new Line();	
 		line.setForeground(Color.RED); //Color of line. change late
@@ -324,40 +338,63 @@ public class LineTracer extends JPanel{
 		line.list.set(3,coord[3]*12 + 237);
 		line.repaint();
 	}
-	
+
 	public void planeCoordinates(Integer x, Integer y) {
 		if(x >= 0 && y >= 0) y = -1*y;
 		else if (x >= 0 && y < 0) y = -1*y;
 		else if (x < 0 && y >= 0) y = -1*y;
 		else y = -1*y;
-		
+
 		inputFromX = x;
 		inputFromY = y;
 	}
-	
+
 	public void coordinateArray(Integer x1, Integer y1, Integer x2, Integer y2) {
 		coord[0] = x1;
 		coord[1] = y1;
 		coord[2] = x2;
 		coord[3] = y2;
 	}
-	
-	public boolean dataValidation(Integer x, Integer y) {
+
+	public boolean dataValidationCartesian(Integer x, Integer y) {
 		if(x > 20 || y > 20) { //only save when its input<20
-			return true;
+			JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
 		}
 		return false;
 	}
-	
+	public boolean dataValidationPolar(Integer x, Integer y) {
+		if(x > 30 || y > 360) { //only save when its input<20
+			JOptionPane.showMessageDialog(null, "Numbers must be inside a radius of 30 and a angle of 360", "Warning", JOptionPane.INFORMATION_MESSAGE);
+		}
+		return false;
+	}
+
 	public void inputValidation(Integer x, Integer y) {
-		String Coordinates = (String) comboBoxCoordinates.getSelectedItem();
-		String Graphics = (String) comboBoxGraphic.getSelectedItem();
+		Coordinates = (String) comboBoxCoordinates.getSelectedItem();
+		Graphics = (String) comboBoxGraphic.getSelectedItem();
+		
+		//When the GUI starts Coordinates and Graphics are equal to Cartesian
+		//Because buttons are not pressed values are then changes to null
+		//To prevent that, we equal them here to Cartesian.
+		if (Graphics == null && Coordinates == null) {
+			Coordinates = "Cartesian";
+			Graphics = "Cartesian";
+		}
+		if(Coordinates == null) {
+			Coordinates = "Cartesian";
+		}
+		if(Graphics == null) {
+			Graphics = "Cartesian";
+		}
+		
 		
 		if(Coordinates.equals("Cartesian") && Graphics.equals("Cartesian")) {
+			dataValidationCartesian(inputFromX, inputFromY);
 			inputFromX = x;
 			inputFromY = y;
 		}
 		else if (Coordinates.equals("Cartesian") && Graphics.equals("Polar")) {
+			dataValidationCartesian(inputFromX, inputFromY);
 			inputFromX = (int) convertion.PolarR(x, y);
 			inputFromY = (int) convertion.PolarAngle(x, y);
 		}
