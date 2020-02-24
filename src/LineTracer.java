@@ -31,8 +31,8 @@ public class LineTracer extends JPanel{
 	private JLabel polarGraph = new JLabel();
 	private JComboBox<String> comboBoxGraphic = new JComboBox();
 	private JComboBox<String> comboBoxCoordinates = new JComboBox();
-	public String Coordinates = "Cartesian";
-	public String Graphics = "Cartesian";
+	private String Coordinates = "Cartesian";
+	private String Graphics = "Cartesian";
 	private Coordinates convertion;
 	int inputFromX = 0;
 	int inputFromY = 0;
@@ -65,7 +65,6 @@ public class LineTracer extends JPanel{
 	public LineTracer() {
 		initialize();		
 	}
-
 
 	/*
 	 * Initialize the contents of the frame.
@@ -176,21 +175,28 @@ public class LineTracer extends JPanel{
 					if(Coordinates.equals("Cartesian")) {
 						inputFromX = Integer.parseInt(inputX.getText());   //receive input from x text field
 						inputFromY = Integer.parseInt(inputY.getText());   //receive input from y text field
-						dataValidationPolar(inputFromX, inputFromY);
-						inputValidation(inputFromX, inputFromY);
-						System.out.println("Im here-Cartesian");
+						if(dataValidationCartesian(inputFromX, inputFromY)) {
+							JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							inputValidation(inputFromX, inputFromY);
+							planeCoordinates(inputFromX, inputFromY);
+							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+							drawing();
+						}
 					}
 					else {
 						inputFromR =  Integer.parseInt(inputX.getText());
 						inputFromAng =  Integer.parseInt(inputY.getText());
-						dataValidationPolar(inputFromR, inputFromAng);
-						inputValidation(inputFromR, inputFromAng);
-						System.out.println("Im here-Polar");
+						if(dataValidationPolar(inputFromR, inputFromAng)) {
+							JOptionPane.showMessageDialog(null, "Numbers must be inside a radius of 30 and a angle of 360", "Warning", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							inputValidation(inputFromR, inputFromAng);
+							coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
+							drawing();
+						}
 					}
-
-					planeCoordinates(inputFromX, inputFromY);
-					coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
-					drawing();
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
@@ -326,18 +332,36 @@ public class LineTracer extends JPanel{
 	}
 
 	public void drawing() {
+		Graphics = (String) comboBoxGraphic.getSelectedItem();
 		line = new Line();	
 		line.setForeground(Color.RED); //Color of line. change late
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
 		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);
+		if(Graphics == null) {
+			Graphics = "Cartesian";
+		}
+		if(Graphics.equals("Cartesian")) {
+			line.list.set(0,coord[0]*12 + 237);
+			line.list.set(1,coord[1]*12 + 237);
+			line.list.set(2,coord[2]*12 + 237);
+			line.list.set(3,coord[3]*12 + 237);
+			line.repaint();
+			frame.getContentPane().add(cartGraph);
+			frame.getContentPane().add(polarGraph);
+		}
+		else {
+			line.list.set(0,coord[0]*6 + 237);
+			line.list.set(1,coord[1]*6 + 237);
+			line.list.set(2,coord[2]*6 + 237);
+			line.list.set(3,coord[3]*6 + 237);
+			line.repaint();
+			frame.getContentPane().add(cartGraph);
+			frame.getContentPane().add(polarGraph);
+		}
 
-		line.list.set(0,coord[0]*12 + 237);
-		line.list.set(1,coord[1]*12 + 237);
-		line.list.set(2,coord[2]*12 + 237);
-		line.list.set(3,coord[3]*12 + 237);
-		line.repaint();
 	}
+	
 
 	public void planeCoordinates(Integer x, Integer y) {
 		if(x >= 0 && y >= 0) y = -1*y;
@@ -358,13 +382,13 @@ public class LineTracer extends JPanel{
 
 	public boolean dataValidationCartesian(Integer x, Integer y) {
 		if(x > 20 || y > 20) { //only save when its input<20
-			JOptionPane.showMessageDialog(null, "Number must be less or equal to 20", "Warning", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		}
 		return false;
 	}
 	public boolean dataValidationPolar(Integer x, Integer y) {
 		if(x > 30 || y > 360) { //only save when its input<20
-			JOptionPane.showMessageDialog(null, "Numbers must be inside a radius of 30 and a angle of 360", "Warning", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		}
 		return false;
 	}
@@ -395,16 +419,18 @@ public class LineTracer extends JPanel{
 		}
 		else if (Coordinates.equals("Cartesian") && Graphics.equals("Polar")) {
 			dataValidationCartesian(inputFromX, inputFromY);
-			inputFromX = (int) convertion.PolarR(x, y);
-			inputFromY = (int) convertion.PolarAngle(x, y);
+			inputFromX = x;
+			inputFromY = y;
 		}
 		else if (Coordinates.equals("Polar") && Graphics.equals("Cartesian")) {
 			inputFromX = (int) convertion.CartesianX(x, y);
 			inputFromY = (int) convertion.CartesianY(x, y);
+			planeCoordinates(inputFromX, inputFromY);
 		}
 		else {
-			inputFromX = x;
-			inputFromY = y;
+			inputFromX = (int) convertion.CartesianX(x, y);;
+			inputFromY = (int) convertion.CartesianY(x, y);;
+			planeCoordinates(inputFromX, inputFromY);
 		}
 	}
 }
