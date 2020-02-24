@@ -20,9 +20,19 @@ public class Coordinates extends Object {
 		return r * Math.cos(Math.toRadians(a))+1;
 	}
 	
+	// return the X value to a precision of double
+	public static double CartesianXPrecisionCalc (double r, double a) {
+		return r * Math.cos(Math.toRadians(a));
+	}
+	
 	//returns the Y value of the cartesian coordinate
 	//formula: x = r*sin(angle)
 	public static double CartesianY (double r, double a) {
-		return r * Math.sin(Math.toRadians(a))+1;
+		return r * Math.sin(Math.toRadians(a))/*+1*/;
+	}
+	
+	// return the Y value to a precision of double
+	public static double CartesianYPrecisionCalc (double r, double a) {
+		return r * Math.sin(Math.toRadians(a));
 	}
 }
