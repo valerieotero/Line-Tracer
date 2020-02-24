@@ -39,6 +39,7 @@ public class LineTracer extends JPanel{
 	int inputFromR = 0;
 	int inputFromAng = 0;
 	private Line line;
+	private Circle circle;
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
@@ -201,7 +202,7 @@ public class LineTracer extends JPanel{
 					planeCoordinates(inputFromX, inputFromY);
 					coordinateArray(coord[2], coord[3], inputFromX, inputFromY);
 					drawing();
-					
+					drawingCircle();
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Not a number, try again");
@@ -216,6 +217,15 @@ public class LineTracer extends JPanel{
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				circle.listCircle.set(2,237);
+				circle.listCircle.set(3,237);
+				circle.repaint();
+				
+				inputX.setText("0");
+				inputY.setText("0");
+
+				coord[2] = 0;
+				coord[3] = 0;
 
 			}
 		});
@@ -228,7 +238,10 @@ public class LineTracer extends JPanel{
 		btnBackToOrigin.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				
+				circle.listCircle.set(2,237);
+				circle.listCircle.set(3,237);
+				circle.repaint();
+
 				inputX.setText("0");
 				inputY.setText("0");
 
@@ -328,7 +341,19 @@ public class LineTracer extends JPanel{
 		//DUMMY LABEL **IMPORTANT**
 		JLabel nuller = new JLabel("");
 		frame.getContentPane().add(nuller);
-
+		
+		//ADDED BY JOHN FOR TEST PURPOSES (NEEDED OR CIRCLE WON'T WORK)
+		//Creates circle at origin
+		circle = new Circle();
+		circle.setForeground(Color.BLUE);
+		circle.setOpaque(false); // Can make a boolean to set visibility of this circle
+		circle.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
+		frame.getContentPane().add(circle);
+		circle.listCircle.set(2, 237);
+		circle.listCircle.set(3, 237);
+		circle.repaint();
+		frame.getContentPane().add(cartGraph); // Make sure these two are ok
+		frame.getContentPane().add(polarGraph); // ... Might cause problems in future
 	}
 
 
@@ -347,7 +372,7 @@ public class LineTracer extends JPanel{
 	public void drawing() {
 		
 		line = new Line();	
-		line.setForeground(Color.BLACK); //Color of line. change late
+		line.setForeground(Color.RED); //Color of line. change late
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
 		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
 		frame.getContentPane().add(line);
@@ -359,6 +384,15 @@ public class LineTracer extends JPanel{
 		line.repaint();
 		frame.getContentPane().add(cartGraph);
 		frame.getContentPane().add(polarGraph);
+	}
+	
+	// DRAW CIRCLE
+	public void drawingCircle() {
+		circle.listCircle.set(0,coord[0]*12 + 237);
+		circle.listCircle.set(1,coord[1]*12 + 237);
+		circle.listCircle.set(2,coord[2]*12 + 237);
+		circle.listCircle.set(3,coord[3]*12 + 237);
+		circle.repaint();
 	}
 
 	
