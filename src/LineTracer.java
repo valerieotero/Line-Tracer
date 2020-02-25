@@ -15,6 +15,7 @@ import java.awt.Dimension;
 
 import javax.swing.border.Border;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class LineTracer extends JPanel{
@@ -40,6 +41,7 @@ public class LineTracer extends JPanel{
 	int inputFromAng = 0;
 	private Line line;
 	private Circle circle;
+	private ArrayList<Line> linesList = new ArrayList<Line>();
 
 	public JComboBox<String> comboBox_TypeofGraphic;
 
@@ -238,8 +240,10 @@ public class LineTracer extends JPanel{
 		btnReset.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				
-				btnBackToOrigin.doClick();				
+				btnBackToOrigin.doClick();
+				for(Line eraseMe: linesList) {
+					frame.remove(eraseMe);
+				}
 			}
 		});
 		btnReset.setBounds(10, 280, 123, 23);
@@ -360,7 +364,8 @@ public class LineTracer extends JPanel{
 
 	public void drawing() {
 		Graphics = (String) comboBoxGraphic.getSelectedItem();
-		line = new Line();	
+		line = new Line();
+		linesList.add(line);
 		line.setForeground(Color.BLACK); //Color of line. change late
 		line.setOpaque(false); //make canvas color transparent so line can appear in front of plane
 		line.setBounds(260, 42, 475, 475); //These bounds should be the same as the plane image bound
