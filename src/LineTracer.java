@@ -435,7 +435,7 @@ public class LineTracer extends JPanel{
 	}
 
 	public boolean dataValidationCartesian(Integer x, Integer y) {
-		if(x > 20 || y > 20) { //only save when its input<20
+		if(x > 20 || y > 20 || x < -20 || y < -20) { //only save when its input<20
 			return true;
 		}
 		return false;
@@ -444,7 +444,7 @@ public class LineTracer extends JPanel{
 
 	public boolean dataValidationPolar(Integer x, Integer y) {
 
-		if(x > 30 || y > 360) { //only save when its input<20
+		if(x > 30 || y > 360 || x < -30 || y < -360) { //only save when its input<20
 			return true;
 		}
 		return false;
